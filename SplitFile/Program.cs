@@ -11,8 +11,8 @@ namespace SplitFile
 {
     class Program
     {
-        public const int DWSIZE = 16;
-        public static int fileSize = DWSIZE;
+        public const long DWSIZE = 16;
+        public static long fileSize = DWSIZE;
         public static string fileName;
         private static string directoryName;
         private static string fileNameWithoutExtension;
@@ -65,8 +65,9 @@ namespace SplitFile
             string newFileName = string.Format(FILEFORMAT, directoryName, fileNameWithoutExtension, position, fileExtension);
             using (StreamReader sr = new StreamReader(fileName))
             {
-                sr.BaseStream.Position = position * fileSize;
-                long newSize = sr.BaseStream.Length - position * fileSize;
+                long tempPosition = (long)position * (long)fileSize;
+                sr.BaseStream.Position = tempPosition;
+                long newSize = sr.BaseStream.Length - tempPosition;
                 if (newSize > fileSize)
                     newSize = fileSize;
                 using (BinaryReader br = new BinaryReader(sr.BaseStream))
@@ -93,14 +94,14 @@ namespace SplitFile
             }
         }
 
-        private static int RoundUpSize(long size)
+        private static long RoundUpSize(long size)
         {
-            int aSize = DWSIZE;
+            long aSize = DWSIZE;
             if (size < DWSIZE)
                 aSize = DWSIZE;
             else
                 // Rounds up to the nearest multiple of DSIZE
-                aSize = (int)(DWSIZE * ((size + DWSIZE - 1) / DWSIZE));
+                aSize = (long)(DWSIZE * ((size + DWSIZE - 1) / DWSIZE));
             return aSize;
         }
     }
