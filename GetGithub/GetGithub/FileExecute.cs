@@ -36,6 +36,7 @@ namespace GetGithub
                     _log.Log(_url);
                     _log.Log(ex);
                 }
+                _executed = true;
             }
         }
     }
